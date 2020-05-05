@@ -1,5 +1,4 @@
-<!doctype html>
-
+<!DOCTYPE html>
 
 <!--
 
@@ -18,67 +17,83 @@
 -->
 
 <html>
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, user-scalable=no" />
-		<title>WebAudioXML - by Hans Lindetorp</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <title>WebAudioXML - by Hans Lindetorp</title>
 
-		<style>
-			html, body {
-				height: 100%;
-				user-select: none;
-				-webkit-user-select: none;
-			}
+    <style>
+      html,
+      body {
+        height: 100%;
+        user-select: none;
+        -webkit-user-select: none;
+      }
 
-			* {
-			  -webkit-touch-callout: none; /* iOS Safari */
-			  -webk	it-user-select: none; /* Safari */
-			  -khtml-user-select: none; /* Konqueror HTML */
-			  -moz-user-select: none; /* Old versions of Firefox */
-			  -ms-user-select: none; /* Internet Explorer/Edge */
-			  user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
-			}
+      * {
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+      }
 
-			#container {
-			  display: flex;
-			  flex-flow: column;
-			  height: 100%;
-			}
+      #container {
+        display: flex;
+        flex-flow: column;
+        height: 100%;
+      }
 
-			#touchArea {
+      #touchArea {
+        position: relative;
+        border: 1px solid black;
+        flex: 1 auto;
+        margin-bottom: 2em;
+        background: purple;
+        background-image: linear-gradient(white 1px, transparent 0),
+          linear-gradient(90deg, white 1px, transparent 0);
 
-				position: relative;
-			  border: 1px solid black;
-			  flex: 1 auto;
-			  margin-bottom: 2em;
-			  background: purple;
-				background-image: linear-gradient(white 1px, transparent 0),
-			                  linear-gradient(90deg, white 1px, transparent 0);
+        background-size: 6.6667% 100%;
+        touch-action: none;
 
-			  background-size: 6.6667% 100%;
-			  touch-action: none;
+        background-color: purple;
+      }
+    </style>
+  </head>
 
-				background-color: purple;
-			}
-		</style>
-	</head>
+  <body>
+    <div id="container">
+      <div id="instructions">
+        <h3>WebAudioXML</h3>
+        <button onclick="console.log(webAudioXML.lastGesture)">
+          OUTPUT LAST GESTURE IN CONSOLE
+        </button>
+        <button
+          onclick="console.log(webAudioXML.getSequence('_storedGesture'))"
+        >
+          OUTPUT STORED GESTURE IN CONSOLE
+        </button>
+        <button onclick="webAudioXML.copyLastGestureToClipboard()">
+          COPY LAST GESTURE TO CLIPBOARD
+        </button>
+        <button onclick="webAudioXML.lastGesture.play()">
+          REPEAT LAST GESTURE
+        </button>
+        <button onclick="webAudioXML.playSequence('_storedGesture')">
+          PLAY STORED GESTURE
+        </button>
+        <button
+          onclick="compare(webAudioXML.lastGesture, webAudioXML.getSequence('_storedGesture'))"
+        >
+          COMPARE LAST GESTURE TO STORED
+        </button>
+      </div>
+      <div id="touchArea"></div>
+    </div>
 
-
-	<body>
-		<div id="container">
-			<div id="instructions">
-				<h3>WebAudioXML</h3>
-				<button onclick="console.log(webAudioXML.lastGesture)">OUTPUT LAST GESTURE IN CONSOLE</button>
-				<button onclick="console.log(webAudioXML.getSequence('_storedGesture'))">OUTPUT STORED GESTURE IN CONSOLE</button>
-				<button onclick="webAudioXML.copyLastGestureToClipboard()">COPY LAST GESTURE TO CLIPBOARD</button>
-				<button onclick="webAudioXML.lastGesture.play()">REPEAT LAST GESTURE</button>
-				<button onclick="webAudioXML.playSequence('_storedGesture')">PLAY STORED GESTURE</button>
-			</div>
-			<div id="touchArea"></div>
-		</div>
-
-		<script src="WebAudioXML.js" data-source="audio.xml"></script>
-		<script src="eventData.js"></script>
-
-	</body>
+    <script src="WebAudioXML.js" data-source="audio.xml"></script>
+    <script src="eventData.js"></script>
+    <script src="comparison.js"></script>
+  </body>
 </html>
