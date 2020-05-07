@@ -45,12 +45,12 @@ button {
   height: 7rem;
   width: 7rem;
   outline: none;
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   border-radius: 50%;
   background-color: rgb(236, 171, 85);
 }
 button:active {
-  border-color: yellow;
+  border-color: black;
 }
 
 #touchArea {
@@ -83,7 +83,6 @@ button:active {
   }
   #buttons {
     padding-top: 1rem;
-    justify-content: space-between;
   }
   button {
     height: 7rem;

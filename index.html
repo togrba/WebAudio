@@ -1,20 +1,5 @@
 <!DOCTYPE html>
 <link rel="stylesheet" type="text/css" href="index.css" />
-<!--
-
-<h2>Click and slide to play</h2>
-<ul>
-	<li>Pointer relative X position controls pitch</li>
-	<li>Pointer relative Y position controls cutoff frequency of biquad filter</li>
-</ul>
-<p>WebAudioXML is a javascript library that makes it possible to create
-	Web Audio applications using XML syntax. It is a PhD research project by
-	Hans Lindetorp. Please follow me on
-	<a href="https://hans.arapoviclindetorp.se">https://hans.arapoviclindetorp.se</a> and
-	<a href="https://www.facebook.com/hanslindetorpresearch/">https://www.facebook.com/hanslindetorpresearch/</a>
-</p>
-
--->
 
 <html>
   <head>
@@ -32,27 +17,14 @@
         </div>
         <div id="buttons">
           <button onclick="webAudioXML.playSequence('_storedGesture')">
-            1. Play sound
+            1. Play sound to mimic
           </button>
-
           <button
             id="button2"
             disabled
             onclick="webAudioXML.lastGesture.play()"
           >
-            3. Play my sound
-          </button>
-
-          <button
-            id="button3"
-            disabled
-            onclick="compare(webAudioXML.lastGesture, webAudioXML.getSequence('_storedGesture')) ? 
-            (document.getElementById('touchArea').style.cssText = 'border-color:green;', 
-            document.getElementById('touchArea').innerHTML = 'YOU DID IT! Congratulations') : 
-            document.getElementById('touchArea').style.cssText = 'border-color:red;', 
-            document.getElementById('touchArea').innerHTML = 'The sounds do not match..<br/> Try again!'"
-          >
-            4. Compare sounds
+            3. Play my last sound
           </button>
         </div>
       </div>
@@ -60,9 +32,12 @@
         id="touchArea"
         onpointerdown="document.getElementById(this.id).innerHTML = '' ,
         document.getElementById(this.id).style.cssText = 'border-color:transparent;'"
-        onpointerup="document.getElementById(this.id).innerHTML = 'Gesture saved', 
-        document.getElementById('button2').disabled = false, 
-        document.getElementById('button3').disabled = false"
+        onpointerup="document.getElementById('button2').disabled = false, 
+        compare(webAudioXML.lastGesture, webAudioXML.getSequence('_storedGesture')) ? 
+        (document.getElementById('touchArea').style.cssText = 'border-color:green;', 
+        document.getElementById('touchArea').innerHTML = 'YOU DID IT! Congratulations') : 
+        document.getElementById('touchArea').style.cssText = 'border-color:red;', 
+        document.getElementById('touchArea').innerHTML = 'The sounds do not match.. <br/> Try again!'"
       >
         2. Tap and slide to play
       </div>
