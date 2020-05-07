@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+<link rel="stylesheet" type="text/css" href="index.css" />
 <!--
 
 <h2>Click and slide to play</h2>
@@ -20,76 +20,50 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no" />
-    <title>WebAudioXML - by Hans Lindetorp</title>
-
-    <style>
-      html,
-      body {
-        height: 100%;
-        user-select: none;
-        -webkit-user-select: none;
-      }
-
-      * {
-        -webkit-touch-callout: none; /* iOS Safari */
-        -webkit-user-select: none; /* Safari */
-        -khtml-user-select: none; /* Konqueror HTML */
-        -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-        user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
-      }
-
-      #container {
-        display: flex;
-        flex-flow: column;
-        height: 100%;
-      }
-
-      #touchArea {
-        position: relative;
-        border: 1px solid black;
-        flex: 1 auto;
-        margin-bottom: 2em;
-        background: purple;
-        background-image: linear-gradient(white 1px, transparent 0),
-          linear-gradient(90deg, white 1px, transparent 0);
-
-        background-size: 6.6667% 100%;
-        touch-action: none;
-
-        background-color: purple;
-      }
-    </style>
+    <title>Comparing sounds</title>
   </head>
 
   <body>
     <div id="container">
       <div id="instructions">
-        <h3>WebAudioXML</h3>
-        <button onclick="console.log(webAudioXML.lastGesture)">
-          OUTPUT LAST GESTURE IN CONSOLE
-        </button>
-        <button
-          onclick="console.log(webAudioXML.getSequence('_storedGesture'))"
-        >
-          OUTPUT STORED GESTURE IN CONSOLE
-        </button>
-        <button onclick="webAudioXML.copyLastGestureToClipboard()">
-          COPY LAST GESTURE TO CLIPBOARD
-        </button>
-        <button onclick="webAudioXML.lastGesture.play()">
-          REPEAT LAST GESTURE
-        </button>
-        <button onclick="webAudioXML.playSequence('_storedGesture')">
-          PLAY STORED GESTURE
-        </button>
-        <button
-          onclick="compare(webAudioXML.lastGesture, webAudioXML.getSequence('_storedGesture'))"
-        >
-          COMPARE LAST GESTURE TO STORED
-        </button>
+        <div>
+          <h2>Comparing sounds using WebAudioXML</h2>
+          Try to mimic the stored sound by making gestures on the play area!
+        </div>
+        <div id="buttons">
+          <button onclick="webAudioXML.playSequence('_storedGesture')">
+            Play stored gesture
+          </button>
+          <button
+            id="button2"
+            disabled
+            onclick="webAudioXML.lastGesture.play()"
+          >
+            Play last gesture
+          </button>
+          <button
+            id="button3"
+            disabled
+            onclick="compare(webAudioXML.lastGesture, webAudioXML.getSequence('_storedGesture')) ? 
+            (document.getElementById('touchArea').style.cssText = 'border-color:green;', 
+            document.getElementById('touchArea').innerHTML = 'YOU DID IT!') : 
+            document.getElementById('touchArea').style.cssText = 'border-color:red;', 
+            document.getElementById('touchArea').innerHTML = 'The gestures do not match..<br/> Try again!'"
+          >
+            Compare gestures
+          </button>
+        </div>
       </div>
-      <div id="touchArea"></div>
+      <div
+        id="touchArea"
+        onpointerdown="document.getElementById(this.id).innerHTML = '' ,
+        document.getElementById(this.id).style.cssText = 'border-color:transparent;'"
+        onpointerup="document.getElementById(this.id).innerHTML = 'Gesture saved', 
+        document.getElementById('button2').disabled = false, 
+        document.getElementById('button3').disabled = false"
+      >
+        Tap and slide to play
+      </div>
     </div>
 
     <script src="WebAudioXML.js" data-source="audio.xml"></script>
