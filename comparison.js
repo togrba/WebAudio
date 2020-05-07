@@ -1,56 +1,73 @@
+const timeMargin = 50; // Within this margin the time value is considered correct
+const positionMargin = 3; // Within this margin the coordinates is considered correct
+const ratioMargin = 0.3; // The percentage of data points that can be wrong
+
+/**
+ * A type that represents one data point from a sequence. Consists of a time value and a xy coordinate pair.
+ * @typedef {Object} DataPoint
+ * @property {number} time
+ * @property {{relX: number, relY: number}} value
+ */
+
+/**
+ * Checks if `lastSequence` is equal to `storedSequence` within the specified margins.
+ * @param {DataPoint[]} lastSequence
+ * @param {DataPoint[]} storedSequence
+ * @returns {boolean}
+ */
 function compare(lastSequence, storedSequence) {
   lastSequence = lastSequence._events;
   storedSequence = storedSequence._events;
+
   console.log(lastSequence);
   console.log(storedSequence);
-  let numOfCorrect = 0;
+
+  let numInMargin = 0;
   for (let index = 0; index < lastSequence.length; index++) {
     const dataPoint = lastSequence[index];
     if (dataPointInSequence(dataPoint, storedSequence)) {
-      numOfCorrect += 1;
+      numInMargin += 1;
     }
   }
-  let correctRatio = numOfCorrect / lastSequence.length;
-  console.log("correct: " + correctRatio);
-  let lengthRatio = lastSequence.length / storedSequence.length;
-  console.log("length: " + lengthRatio);
-  let ratioMargin = 0.2;
-  console.log(
-    inMargin(correctRatio, ratioMargin) && inMargin(lengthRatio, ratioMargin)
-  );
+  const correctRatio = numInMargin / lastSequence.length;
+  const lengthRatio = lastSequence.length / storedSequence.length;
+
+  console.log("Ratio of correct points: " + correctRatio);
+  console.log("Length ratio: " + lengthRatio);
 
   return (
-    inMargin(correctRatio, ratioMargin) && inMargin(lengthRatio, ratioMargin)
+    inMargin(correctRatio, 1, ratioMargin) && inMargin(lengthRatio, 1, ratioMargin)
   );
-  // if (correctRatio > 0.8 && lastSequence.length * ratioMargin > storedSequence.length) {
-  //   console.log("true");
-  //   return true;
-  // } else {
-  //   console.log("false");
-  //   return false;
-  // }
 }
 
-function inMargin(ratio, margin) {
-  return ratio <= 1 + margin && ratio >= 1 - margin;
-}
-
+/**
+ * Checks if `dataPoint` ± the specified margin exists in the array `sequence`.
+ * @param {DataPoint} dataPoint
+ * @param {DataPoint[]} sequence
+ * @returns {boolean}
+ */
 function dataPointInSequence(dataPoint, sequence) {
   return sequence.some(compareDataPoint.bind(null, dataPoint));
 }
 
+/**
+ * Checks if `singlePoint` is `sequencePoint` ± the specified margin.
+ * @param {DataPoint} singlePoint
+ * @param {DataPoint} sequencePoint
+ */
 function compareDataPoint(singlePoint, sequencePoint) {
-  let timeMargin = 30;
-  let posMargin = 5;
-  let timeInMargin =
-    sequencePoint.time <= singlePoint.time + timeMargin &&
-    sequencePoint.time >= singlePoint.time - timeMargin;
-  let xInMargin =
-    sequencePoint.value.relX <= singlePoint.value.relX + posMargin &&
-    sequencePoint.value.relX >= singlePoint.value.relX - posMargin;
-  let yInMargin =
-    sequencePoint.value.relY <= singlePoint.value.relY + posMargin &&
-    sequencePoint.value.relY >= singlePoint.value.relY - posMargin;
+  return (inMargin(sequencePoint.time, singlePoint.time, timeMargin) &&
+    inMargin(sequencePoint.value.relX, singlePoint.value.relX, positionMargin) &&
+    inMargin(sequencePoint.value.relY, singlePoint.value.relY, positionMargin));
+}
 
-  return timeInMargin && xInMargin && yInMargin;
+/**
+ * A helper that checks if `comparedValue` is in the interval `centerValue ± margin`
+ * @param {number} comparedValue
+ * @param {number} centerValue
+ * @param {number} margin
+ * @returns {boolean}
+ */
+function inMargin(comparedValue, centerValue, margin) {
+  return comparedValue <= centerValue + margin && comparedValue >= centerValue - margin;
 }
