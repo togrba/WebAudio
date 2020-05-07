@@ -32,25 +32,27 @@
         </div>
         <div id="buttons">
           <button onclick="webAudioXML.playSequence('_storedGesture')">
-            Play stored gesture
+            1. Play sound
           </button>
+
           <button
             id="button2"
             disabled
             onclick="webAudioXML.lastGesture.play()"
           >
-            Play last gesture
+            3. Play my sound
           </button>
+
           <button
             id="button3"
             disabled
             onclick="compare(webAudioXML.lastGesture, webAudioXML.getSequence('_storedGesture')) ? 
             (document.getElementById('touchArea').style.cssText = 'border-color:green;', 
-            document.getElementById('touchArea').innerHTML = 'YOU DID IT!') : 
+            document.getElementById('touchArea').innerHTML = 'YOU DID IT! Congratulations') : 
             document.getElementById('touchArea').style.cssText = 'border-color:red;', 
-            document.getElementById('touchArea').innerHTML = 'The gestures do not match..<br/> Try again!'"
+            document.getElementById('touchArea').innerHTML = 'The sounds do not match..<br/> Try again!'"
           >
-            Compare gestures
+            4. Compare sounds
           </button>
         </div>
       </div>
@@ -62,7 +64,7 @@
         document.getElementById('button2').disabled = false, 
         document.getElementById('button3').disabled = false"
       >
-        Tap and slide to play
+        2. Tap and slide to play
       </div>
     </div>
 
