@@ -103,4 +103,9 @@ button:active {
     width: 90vw;
     height: 90vw;
   }
+  #instructions {
+    height: 35vh;
+    justify-content: flex-start;
+    margin-bottom: 2rem;
+  }
 }
