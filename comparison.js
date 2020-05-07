@@ -19,17 +19,6 @@ function compare(lastSequence, storedSequence) {
     inMargin(correctRatio, ratioMargin) && inMargin(lengthRatio, ratioMargin)
   );
 
-  //Temporary to change of color to make it clear if you succeded of not
-  let container = document.getElementById("container");
-  if (
-    inMargin(correctRatio, ratioMargin) &&
-    inMargin(lengthRatio, ratioMargin)
-  ) {
-    container.style.cssText = "background-color:green;";
-  } else {
-    container.style.cssText = "background-color:red;";
-  }
-
   return (
     inMargin(correctRatio, ratioMargin) && inMargin(lengthRatio, ratioMargin)
   );
