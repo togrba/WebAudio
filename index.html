@@ -16,15 +16,11 @@
           Try to mimic the stored sound by making gestures on the play area!
         </div>
         <div id="buttons">
-          <button onclick="webAudioXML.playSequence('_storedGesture')">
+          <button id="playButton">
             1. Play sound to mimic
           </button>
-          <button
-            id="button2"
-            disabled
-            onclick="webAudioXML.lastGesture.play(), webAudioXML.copyLastGestureToClipboard()"
-          >
-            3. Play my last sound
+          <button id="compareButton" disabled>
+            3. Play my last sound and compare
           </button>
         </div>
       </div>
