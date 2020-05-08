@@ -3,7 +3,7 @@
 	<Chain portamento="50">
 
 		<OscillatorNode type="sawtooth">
-			<frequency follow="relX" map="0,100,36,60, MIDI" steps="0 2 4 5 7 9 11 12"></frequency>
+			<frequency follow="relX" map="0,100,100,1000"></frequency>
 		</OscillatorNode>
 
 		<BiquadFilterNode type="lowpass">
