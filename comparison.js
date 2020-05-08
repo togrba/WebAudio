@@ -1,6 +1,6 @@
-const timeMargin = 50; // Within this margin the time value is considered correct
-const positionMargin = 3; // Within this margin the coordinates is considered correct
-const ratioMargin = 0.3; // The percentage of data points that can be wrong
+const timeMargin = 70; // Within this margin the time value is considered correct
+const positionMargin = 7; // Within this margin the coordinates is considered correct
+const ratioMargin = 0.35; // The percentage of data points that can be wrong
 
 /**
  * A type that represents one data point from a sequence. Consists of a time value and a xy coordinate pair.
