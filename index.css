@@ -65,12 +65,13 @@ button:active {
   border-radius: 10px;
   width: 90vh;
   height: 90vh;
-  /*background-image: linear-gradient(white 1px, transparent 0),
+  /* Add this again to add lines
+  background-image: linear-gradient(white 1px, transparent 0),
     linear-gradient(90deg, white 1px, transparent 0);
     */
   background-size: 6.6667% 100%;
   touch-action: none;
-
+  cursor: pointer;
   background-color: rgb(255, 228, 77);
 }
 
@@ -85,6 +86,7 @@ button:active {
   #touchArea {
     width: 70vw;
     height: 70vw;
+    margin-bottom: 2rem;
   }
 }
 
@@ -92,9 +94,5 @@ button:active {
   #touchArea {
     width: 90vw;
     height: 90vw;
-    margin-bottom: 2rem;
-  }
-  #instructions {
-    justify-content: flex-start;
   }
 }
