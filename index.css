@@ -75,7 +75,7 @@ button:active {
   background-color: rgb(255, 228, 77);
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1200px) {
   #container {
     flex-flow: column;
   }
