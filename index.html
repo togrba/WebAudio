@@ -28,17 +28,7 @@
           </button>
         </div>
       </div>
-      <div
-        id="touchArea"
-        onpointerdown="document.getElementById(this.id).innerHTML = '' ,
-        document.getElementById(this.id).style.cssText = 'border-color:transparent;'"
-        onpointerup="document.getElementById('button2').disabled = false, 
-        compare(webAudioXML.lastGesture, webAudioXML.getSequence('_storedGesture')) ? 
-        (document.getElementById('touchArea').style.cssText = 'border-color:green;', 
-        document.getElementById('touchArea').innerHTML = 'YOU DID IT! Congratulations') : 
-        document.getElementById('touchArea').style.cssText = 'border-color:red;', 
-        document.getElementById('touchArea').innerHTML = 'The sounds do not match.. <br/> Try again!'"
-      >
+      <div id="touchArea">
         2. Tap and slide to play
       </div>
     </div>
@@ -46,5 +36,6 @@
     <script src="WebAudioXML.js" data-source="audio.xml"></script>
     <script src="eventData.js"></script>
     <script src="comparison.js"></script>
+    <script src="eventHandler.js"></script>
   </body>
 </html>
