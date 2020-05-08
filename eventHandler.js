@@ -8,9 +8,10 @@ function touchAreaClick(event) {
   buttonTwo.disabled = false;
   compare(webAudioXML.lastGesture, webAudioXML.getSequence("_storedGesture"))
     ? ((touchArea.style.cssText = "border-color:green;"),
-      (touchArea.innerHTML = "YOU DID IT! Congratulations"))
-    : (touchArea.style.cssText = "border-color:red;"),
-    (touchArea.innerHTML = "The sounds do not match.. <br/> Try again!");
+      (touchArea.innerHTML =
+        "YOU DID IT! <br/> The sounds and gestures match!"))
+    : ((touchArea.style.cssText = "border-color:red;"),
+      (touchArea.innerHTML = "The sounds do not match.. <br/> Try again!"));
 
   event.preventDefault();
 }
