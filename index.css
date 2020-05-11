@@ -1,0 +1,115 @@
+html,
+body {
+  height: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+  font-family: Avenir;
+  font-size: 1rem;
+}
+
+* {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+}
+
+#container {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: space-evenly;
+  min-height: 95%;
+}
+
+#instructions {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+}
+
+#buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
+}
+button {
+  font-size: 1rem;
+  height: 3rem;
+  width: 90%;
+  outline: none;
+  border: 1px solid transparent;
+  border-radius: 4rem;
+  background-color: rgb(236, 171, 85);
+  margin: 1rem 0;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+}
+button:active {
+  border-color: black;
+  transform: translateY(-4px);
+}
+
+#touchArea {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  text-align: center;
+  border: 5px solid transparent;
+  border-radius: 10px;
+  width: 90vh;
+  height: 90vh;
+  /* Add this again to add lines
+  background-image: linear-gradient(white 1px, transparent 0),
+    linear-gradient(90deg, white 1px, transparent 0);
+    */
+  background-size: 6.6667% 100%;
+  touch-action: none;
+  cursor: pointer;
+  background-color: rgb(255, 228, 77);
+}
+
+@media screen and (max-width: 1200px) {
+  #container {
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
+
+  #touchArea {
+    width: 80vw;
+    height: 80vw;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #container {
+    justify-content: flex-start;
+  }
+
+  #buttons {
+    margin: 0.5rem 0;
+  }
+  button {
+    margin: 0.5rem 0;
+  }
+  #touchArea {
+    width: 90vw;
+    height: 90vw;
+  }
+}
+
+@media screen and (max-height: 600px) {
+  h3 {
+    margin: 0;
+  }
+  button {
+    height: 2rem;
+    font-size: 0.8rem;
+  }
+}
