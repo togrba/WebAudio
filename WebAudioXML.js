@@ -218,9 +218,11 @@ class AudioObject{
 			  	if(this._params.value){
 				  	this._params.value = WebAudioUtils.typeFixParam(nodeType, this._params.value);
 				  	this._node.value = this._params.value;
+            parentAudioObj._params[nodeType] = this._params.value;
 				  }
+          let isPartOfASynth = xmlNode.closest("Synth");
+  				if(this._params.follow && !isPartOfASynth){
 
-  				if(this._params.follow){
   					this.watcher = new Watcher(xmlNode, this._params.follow, {
               delay: this.getParameter("delay"),
               waxml: this.waxml,
@@ -246,10 +248,16 @@ class AudioObject{
                   }
                   break;
 
+                  case "playbackRate":
+                  parentAudioObj.playbackRate = val;
+                  break;
+
     							default:
     							break;
     						}
-
+                if(this._nodeType == "playbackrate"){
+                  //console.log("playbackRate", val);
+                }
     						this.setTargetAtTime(this._node, val, 0, time, true);
     					 }
              });
@@ -389,6 +397,13 @@ class AudioObject{
 		  	case "audiobuffersourcenode":
 		  	this._node = this._ctx.createBufferSource();
 		  	this._node.buffer = this._buffer;
+
+        this.loop = this._params.loop;
+        if(this.loop){
+          this.loopEnd = this._params.loopEnd;
+          this.loopStart = this._params.loopStart;
+        }
+        this.playbackRate = this._params.playbackRate;
 		  	this._node.connect(this._destination);
 		  	this._node.start();
 		  	break;
@@ -397,8 +412,9 @@ class AudioObject{
 		  	case "frequency":
 		  	if(this._params.follow){
 			  	if(this._params.follow.includes("MIDI")){
-				  	let MIDI = data.note;
-				  	let MIDInote = eval(this._params.follow);
+            let offset = this._params.follow[1];
+            offset = offset ?  parseFloat(offset) : 0;
+				  	let MIDInote = data.note + offset;
 			  		let hz = WebAudioUtils.MIDInoteToFrequency(MIDInote);
 				  	this.value = hz;
 			  	}
@@ -451,6 +467,10 @@ class AudioObject{
 
 		  	}
 		  	break;
+
+        case "audiobuffersourcenode":
+        this._node.stop();
+        break;
 	  	}
   	}
 
@@ -529,6 +549,47 @@ class AudioObject{
 
 	  	}
   	}
+
+    set loop(val){
+      this._node.loop = val == true;
+    }
+
+    get loop(){
+      return this._node.loop;
+    }
+
+    set loopStart(val){
+      if(val){
+        this._node.loopStart = val * this._params.timescale;
+      }
+    }
+
+    get loopStart(){
+      return this._node.loopStart / this._params.timescale;
+    }
+
+    set loopEnd(val){
+      if(val){
+        this._node.loopEnd = val * this._params.timescale;
+      } else {
+        if(this._buffer){
+          this._node.loopEnd = this._buffer.duration;
+        }
+      }
+    }
+
+    get loopEnd(){
+      return this._node.loopEnd / this._params.timescale;
+    }
+
+    set playbackRate(val){
+      val = val ? val : 1;
+      this.setTargetAtTime("playbackRate", val);
+    }
+
+    get playbackRate(){
+      return this._node.playbackRate.value;
+    }
 
   	set gain(val){
 	  	this.setTargetAtTime("gain", val);
@@ -1627,16 +1688,16 @@ module.exports = InteractionManager;
 
 
 
-	
+
 class Loader {
 
 
 
 	constructor(src, callBack){
-		
+
 		this.href = src;
 		this.complete = false;
-	
+
 		if(src){
 		  	fetch(src)
 		  	.then(response => response.text())
@@ -1659,18 +1720,18 @@ class Loader {
 
 
 Loader.getPath = (url, localPath = "") => {
-	
+
 	let slash = "/";
 	if(!localPath.endsWith(slash)){
 		localPath += slash;
 	}
 	if(!url.includes(slash + slash)){
 		// add local path (relative to linking document
-		// to URL so relative links are relative to the current XML scope and 
+		// to URL so relative links are relative to the current XML scope and
 		// not to the main HTML-file
-		url = localPath + url; 
+		url = localPath + url;
 	}
-	
+
 	return url;
 }
 
@@ -1680,7 +1741,7 @@ Loader.getFolder = path => {
 	let slash = "/";
 	let i = path.lastIndexOf(slash);
 	return path.substring(0, i);
-	
+
 }
 
 
@@ -1844,18 +1905,18 @@ var AudioObject = require('./AudioObject.js');
 var Synth = require('./Synth.js');
 
 
-	
+
 class Parser {
-		  	
+
 	constructor(source, waxml, callBack){
-		
+
 	  	this.waxml = waxml;
 	  	let _ctx = this.waxml._ctx;
-	  	
+
 		this.callBack = callBack;
 		this.externalFiles = [];
 		this._ctx = _ctx;
-		
+
 		if(source){
 			if(source.includes(".") || source.includes("#") || source == "xml"){
 				// if check if XML is embedded in HTML
@@ -1863,16 +1924,16 @@ class Parser {
 				if(xml){
 					this._xml = xml.firstElementChild;
 				}
-				
+
 			}
-			
-			
+
+
 			if(this._xml){
 				this.parseXML(this._xml);
 				this._xml.style.display = "none";
 				this.checkLoadComplete();
 			} else {
-					
+
 				let extFile = new Loader(source, XMLroot => {
 					this._xml = XMLroot;
 					let localPath = Loader.getFolder(source);
@@ -1883,92 +1944,92 @@ class Parser {
 			}
 		} else {
 			console.error("No WebAudioXML source specified");
-		}			
+		}
 	}
-	
+
 	checkLoadComplete(){
 		let loading = this.externalFiles.find(file => file.complete == false);
 		if(!loading){
 			this.callBack(this._xml);
 		}
 	}
-	
+
 	parseXML(xmlNode, localPath){
-		
+
 		let href = xmlNode.getAttribute("href");
 		let nodeName = xmlNode.nodeName.toLowerCase();
-		
-		
+
+
 		if(href && !xmlNode.loaded && nodeName != "link"){
-			
+
 			href = Loader.getPath(href, localPath);
 			localPath = Loader.getFolder(href);
-			
+
 			// if this node is external	and not yet linked
 			let extFile = new Loader(href, externalXML => {
-				
+
 				xmlNode.loaded = true;
 				this.parseXML(externalXML, localPath);
-				
+
 				// import audioObject and children into internal XML DOM
 				xmlNode.audioObject = externalXML.audioObject;
 				Array.from(externalXML.children).forEach(childNode => {
 					if(childNode.nodeName.toLowerCase() != "parsererror"){
 						xmlNode.appendChild(childNode);
 					}
-					
+
 				});
-				
+
 				this.checkLoadComplete();
 			});
 			this.externalFiles.push(extFile);
-			
+
 		} else {
-			
-			// if this node is internal	
-			
-			
+
+			// if this node is internal
+
+
 			switch(nodeName){
-				
+
 				case "parsererror":
 				break;
-				
+
 				case "link":
 				// import style if specified
 				href = Loader.getPath(href, localPath);
 				let linkElement = document.createElement("link");
 				linkElement.setAttribute("href", href);
 				linkElement.setAttribute("rel", "stylesheet");
-				document.head.appendChild(linkElement);	
+				document.head.appendChild(linkElement);
 				break;
-				
+
 				case "style":
 				// import style if specified
-				document.head.appendChild(xmlNode);	
+				document.head.appendChild(xmlNode);
 				break;
-				
+
 				case "synth":
-				let synth = new Synth(xmlNode, this.waxml, localPath);				
+				let synth = new Synth(xmlNode, this.waxml, localPath);
 				xmlNode.audioObject = synth;
 				xmlNode.querySelectorAll("voice").forEach(node => this.parseXML(node, localPath));
 				break;
-				
+
 				default:
 				xmlNode.audioObject = new AudioObject(xmlNode, this.waxml, localPath);
-				Array.from(xmlNode.children).forEach(node => this.parseXML(node, localPath));				
+				Array.from(xmlNode.children).forEach(node => this.parseXML(node, localPath));
 				break;
 			}
 
-			
-		
+
+
 		}
-		
-		
+
+
 	}
 }
-  	
 
-  	
+
+
 module.exports = Parser;
 
 },{"./AudioObject.js":1,"./Loader.js":6,"./Synth.js":11}],9:[function(require,module,exports){
@@ -2251,7 +2312,7 @@ class Synth{
 
 
 		this.watcher = new Watcher(xmlNode, this._params.follow, {
-			delay: this.getParameter(delay),
+			delay: this.getParameter("delay"),
 			waxml: this.waxml,
 			callBack: note => {
 				if(note[0]){
@@ -2574,7 +2635,11 @@ class WebAudio {
 
 				new Parser(source, this, xmlDoc => {
 					this._xml = xmlDoc;
-					this.ui.registerEvents(this._xml.getAttribute("interactionArea"));
+					let interactionArea = this._xml.getAttribute("interactionArea");
+					if(interactionArea){
+						this.ui.registerEvents(interactionArea);
+					}
+
 					//webAudioXML = xmlDoc.audioObject;
 					//webAudioXML.touch = touches;
 					new Connector(xmlDoc, _ctx);
@@ -2795,6 +2860,7 @@ WebAudioUtils.typeFixParam = (param, value) => {
 		break;
 
 		case "normalize":
+		case "loop":
 		value = value == "true";
 		break;
 
@@ -2834,6 +2900,11 @@ WebAudioUtils.typeFixParam = (param, value) => {
 		case "reduction":
 		case "attack":
 		case "release":
+
+		// AudioBufferSourceNode
+		case "playbackRate":
+		case "loopStart":
+		case "loopEnd":
 		value = parseFloat(value);
 		break;
 
@@ -2945,6 +3016,18 @@ WebAudioUtils.caseFixParameter = param => {
 	  	 case "delaytime":
 	  	 param = "delayTime";
 	  	 break;
+
+			 case "loopend":
+			 param = "loopEnd";
+			 break;
+
+			 case "loopstart":
+			 param = "loopStart";
+			 break;
+
+			 case "playbackrate":
+			 param = "playbackRate";
+			 break;
 
 	  	 case "maxdelaytime":
 	  	 param = "maxDelayTime";

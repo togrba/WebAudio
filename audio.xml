@@ -1,21 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Audio version="1.0" timeUnit="ms" interactionArea="#touchArea" gain="-10dB">
-	<Chain portamento="50">
-
-		<OscillatorNode type="sawtooth">
-			<frequency follow="relX" map="0,100,100,1000"></frequency>
-		</OscillatorNode>
-
+	<Chain portamento="50" gain="6db">
+		<AudioBufferSourceNode loop="true" src="WebAudio/track05.wav" trig="pointer" loopStart="0">
+		<!-- <AudioBufferSourceNode loop="true" src="WebAudio/track01.wav" trig="pointer" loopStart="0" loopEnd="5050"> -->
+			<!-- <playbackRate value="1" follow="relX" map="0, 100, -2, 2></playbackRate> -->
+			<playbackRate follow="relX"></playbackRate>
+		</AudioBufferSourceNode>
 		<BiquadFilterNode type="lowpass">
-			<frequency follow="relY" map="100,0,0,5000, 3"></frequency>
+			<frequency follow="relY" map="0,100,150,2000"></frequency>
 		</BiquadFilterNode>
-
+		<Send output="#delay" gain="-2dB"></Send>
+	</Chain>
+	<Chain portamento="50" gain="-3db">
+		<!-- Set navigation/filters centered in middle?? -->
+		<Mixer>
+			<!-- <OscillatorNode type="triangle">
+				<frequency follow="relX" map="0, 100, 39, 63, MIDI" steps="0 2 3 5 7 9 10 12"></frequency>
+			</OscillatorNode>
+			<OscillatorNode type="triangle">
+				<frequency follow="relX" map="0, 100, 44, 70, MIDI" steps="0 2 3 5 7 9 10 12"></frequency>
+			</OscillatorNode> -->
+			<OscillatorNode type="triangle">
+				<frequency follow="relX" map="0, 100, 77.78, 311.13"></frequency>
+			</OscillatorNode>
+			<OscillatorNode type="triangle">
+				<frequency follow="relX" map="0, 100, 103.83, 466.16"></frequency>
+			</OscillatorNode>
+		</Mixer>
+		<BiquadFilterNode type="lowpass">
+			<frequency follow="relY" map="100,0,150,2000"></frequency>
+		</BiquadFilterNode>
 		<GainNode>
 			<gain>
-				<Envelope adsr="100,100,50,20" trig="pointer" max="1"></Envelope>
+				<Envelope adsr="100,100,50,20" trig="pointer" max="3"></Envelope>
 			</gain>
 		</GainNode>
-
+		<Send output="#delay" gain="-6dB"></Send>
 	</Chain>
-
+	<Chain id="delay">
+		<DelayNode delayTime="500"></DelayNode>
+		<BiquadFilterNode frequency="1000"></BiquadFilterNode>
+		<Send output="#delay" gain="-3dB"></Send>
+	</Chain>
 </Audio>
