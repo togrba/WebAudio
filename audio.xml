@@ -2,8 +2,6 @@
 <Audio version="1.0" timeUnit="ms" interactionArea="#touchArea" gain="-10dB">
 	<Chain portamento="50" gain="6db">
 		<AudioBufferSourceNode loop="true" src="WebAudio/track05.wav" trig="pointer" loopStart="0">
-		<!-- <AudioBufferSourceNode loop="true" src="WebAudio/track01.wav" trig="pointer" loopStart="0" loopEnd="5050"> -->
-			<!-- <playbackRate value="1" follow="relX" map="0, 100, -2, 2></playbackRate> -->
 			<playbackRate follow="relX"></playbackRate>
 		</AudioBufferSourceNode>
 		<BiquadFilterNode type="lowpass">
@@ -12,19 +10,12 @@
 		<Send output="#delay" gain="-2dB"></Send>
 	</Chain>
 	<Chain portamento="50" gain="-3db">
-		<!-- Set navigation/filters centered in middle?? -->
 		<Mixer>
-			<!-- <OscillatorNode type="triangle">
-				<frequency follow="relX" map="0, 100, 39, 63, MIDI" steps="0 2 3 5 7 9 10 12"></frequency>
-			</OscillatorNode>
-			<OscillatorNode type="triangle">
-				<frequency follow="relX" map="0, 100, 44, 70, MIDI" steps="0 2 3 5 7 9 10 12"></frequency>
-			</OscillatorNode> -->
 			<OscillatorNode type="triangle">
 				<frequency follow="relX" map="0, 100, 77.78, 311.13"></frequency>
 			</OscillatorNode>
 			<OscillatorNode type="triangle">
-				<frequency follow="relX" map="0, 100, 103.83, 466.16"></frequency>
+				<frequency follow="relX" map="0, 100, 116.54, 466.16"></frequency>
 			</OscillatorNode>
 		</Mixer>
 		<BiquadFilterNode type="lowpass">
