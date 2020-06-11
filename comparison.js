@@ -1,5 +1,5 @@
-const timeMargin = 90; // Within this margin the time value is considered correct
-const positionMargin = 12.5; // Within this margin the coordinates is considered correct
+const timeMargin = 100; // Within this margin the time value is considered correct
+const positionMargin = 14.5; // Within this margin the coordinates is considered correct
 const ratioMargin = 0.75; // The percentage of data points that can be wrong
 // const timeMargin = 70; // Within this margin the time value is considered correct
 // const positionMargin = 7.5; // Within this margin the coordinates is considered correct
@@ -13,7 +13,7 @@ const ratioMargin = 0.75; // The percentage of data points that can be wrong
  */
 
 /**
- * Checks if `lastSequence` is equal to `storedSequence` within the specified margins.
+   * Checks if `lastSequence` is equal to `storedSequence` within the specified margins.
  * @param {DataPoint[]} lastSequence
  * @param {DataPoint[]} storedSequence
  * @returns {boolean}
